@@ -29,8 +29,8 @@ public class SecurityConfiguration  {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/all").permitAll()
-                        .requestMatchers("/read").hasRole("read")
-                        .requestMatchers("/write").hasRole("write")
+                        .requestMatchers("/read").hasAuthority("read")
+                        .requestMatchers("/write").hasAuthority("write")
                         .anyRequest().authenticated());
         return http.build();
     }
@@ -40,13 +40,13 @@ public class SecurityConfiguration  {
         UserDetails user1 = User.builder()
                 .username("read")
                 .password(bCryptPasswordEncoder().encode("1234"))
-                .roles("read")
+                .authorities("read")
                 .build();
 
         UserDetails user2 = User.builder()
                 .username("write")
                 .password(bCryptPasswordEncoder().encode("1234"))
-                .roles("write")
+                .authorities("write")
                 .build();
 
         return new InMemoryUserDetailsManager(user1, user2);
